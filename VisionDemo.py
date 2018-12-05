@@ -71,7 +71,12 @@ if __name__ == "__main__":
 
         userVision = UserVision(bebopVision)
         bebopVision.set_user_callback_function(userVision.save_pictures, user_callback_args=None)
-        bebopVision.open_video()
+        #bebopVision.open_video()
+        video_capture = userVision
+
+        while True:
+            # Capture frame-by-frame
+            ret, frame = video_capture.read()
 
     else:
         print("Error connecting to bebop.  Retry")
