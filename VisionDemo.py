@@ -9,21 +9,37 @@ from pyparrot.DroneVisionGUI import DroneVisionGUI
 import threading
 import cv2
 import time
+import pickle
+import numpy as np
+from PIL import Image
 
 isAlive = False
+
+face_cascade = cv2.CascadeClassifier('src/cascades/data/haarcascade_frontalface_alt2.xml')
+eye_cascade = cv2.CascadeClassifier('src/cascades/data/haarcascade_eye.xml')
+smile_cascade = cv2.CascadeClassifier('src/cascades/data/haarcascade_smile.xml')
+recognizer = cv2.face.LBPHFaceRecognizer_create()
+recognizer.read("trainer.yml")
+
+labels = {"person_name" : 1}
+with open("labels.pkl", 'rb') as f: #wb ,writing byte
+    og_labels = pickle.load(f)
+    labels = {v: k for k, v in og_labels.items()}
+
 
 class UserVision:
     def __init__(self, vision):
         self.index = 0
         self.vision = vision
+        self.filename = ""
 
     def save_pictures(self, args):
         #print("saving picture")
         img = self.vision.get_latest_valid_picture()
 
         if (img is not None):
-            filename = "test_image_%06d.png" % self.index
-            cv2.imwrite(filename, img)
+            self.filename = "test_image_%06d.png" % self.index
+            cv2.imwrite(self.filename, img)
             self.index +=1
 
 
@@ -72,11 +88,26 @@ if __name__ == "__main__":
         userVision = UserVision(bebopVision)
         bebopVision.set_user_callback_function(userVision.save_pictures, user_callback_args=None)
         #bebopVision.open_video()
-        video_capture = userVision
+        #video_capture = bebopVision
+        frame = bebopVision.get_latest_valid_picture()
+        print(frame)
+        pil_image = Image.open("/home/tyler/Desktop/CSCI3302/CSCI-3302-BMJ-Final-Project/test_image_000001.png").convert("L")
+        final_image = pil_image.resize((550,550), Image.ANTIALIAS)
+        image_array = np.array(final_image,"uint8")
+        #gray = cv2.cvtColor(image_array, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=5) # higher scale facter might increase accuracy
+        for (x, y, w, h) in faces:
+            #print(x,y,w,h)
+            roi_gray = gray[y:y+h, x:x+w]  # (ycord_start, ycord_end) region of interest
+            roi_color = image_array[y:y+h, x:x+w]
+            img_item = "my-image.png"
+            cv2.imwrite(img_item, roi_gray)
 
-        while True:
-            # Capture frame-by-frame
-            ret, frame = video_capture.read()
+            #recognizer
+            id_, conf = recognizer.predict(roi_gray)
+            if conf >= 15: # and conf <= 85:
+                print(id_)
+                print(labels[id_])
 
     else:
         print("Error connecting to bebop.  Retry")
