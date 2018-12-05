@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="86aa421a-1cec-471a-be55-0964adbefc21" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/VisionDemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/VisionDemo.py" afterDir="false" />
-    </list>
+    <list default="true" id="86aa421a-1cec-471a-be55-0964adbefc21" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,12 +22,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="3442" />
+          <entry key="py" value="3444" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="3442" />
+          <entry key="Python" value="3444" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -62,8 +60,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$USER_HOME$/Downloads/opencvhd/opencvhd.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
+            <state relative-caret-position="297">
+              <caret line="32" column="22" lean-forward="true" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -130,9 +128,9 @@
       <list>
         <option value="$USER_HOME$/Downloads/opencvhd.py" />
         <option value="$USER_HOME$/Downloads/opencvhd/faces-train.py" />
-        <option value="$USER_HOME$/Downloads/opencvhd/opencvhd.py" />
         <option value="$PROJECT_DIR$/VisionDemo.py" />
         <option value="$USER_HOME$/Downloads/opencvhd/idk.py" />
+        <option value="$USER_HOME$/Downloads/opencvhd/opencvhd.py" />
       </list>
     </option>
   </component>
@@ -240,7 +238,7 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24983476" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24983476" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -315,8 +313,8 @@
     </entry>
     <entry file="file://$USER_HOME$/Downloads/opencvhd/opencvhd.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
+        <state relative-caret-position="297">
+          <caret line="32" column="22" lean-forward="true" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
