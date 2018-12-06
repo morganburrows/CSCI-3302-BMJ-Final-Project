@@ -12,6 +12,8 @@ import time
 import pickle
 import numpy as np
 from PIL import Image
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 isAlive = False
 
@@ -31,14 +33,14 @@ class UserVision:
     def __init__(self, vision):
         self.index = 0
         self.vision = vision
-        self.filename = ""
+        self.filename = "test_image_000000.png"
 
     def save_pictures(self, args):
         #print("saving picture")
         img = self.vision.get_latest_valid_picture()
 
         if (img is not None):
-            self.filename = "test_image_%06d.png" % self.index
+            self.filename = "test_image_000000.png" #% self.index
             cv2.imwrite(self.filename, img)
             self.index +=1
 
@@ -88,16 +90,18 @@ if __name__ == "__main__":
         userVision = UserVision(bebopVision)
         bebopVision.set_user_callback_function(userVision.save_pictures, user_callback_args=None)
         #bebopVision.open_video()
-        #video_capture = bebopVision
+        video_capture = bebopVision
         frame = bebopVision.get_latest_valid_picture()
         print(frame)
-        pil_image = Image.open("/home/tyler/Desktop/CSCI3302/CSCI-3302-BMJ-Final-Project/test_image_000001.png").convert("L")
+
+        pil_image = Image.open("/home/tyler/Desktop/CSCI3302/CSCI-3302-BMJ-Final-Project/test_image_000000.png").convert("L")
+        #print(userVision.filename)
         final_image = pil_image.resize((550,550), Image.ANTIALIAS)
         image_array = np.array(final_image,"uint8")
         #gray = cv2.cvtColor(image_array, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=5) # higher scale facter might increase accuracy
         for (x, y, w, h) in faces:
-            #print(x,y,w,h)
+            print(x,y,w,h)
             roi_gray = gray[y:y+h, x:x+w]  # (ycord_start, ycord_end) region of interest
             roi_color = image_array[y:y+h, x:x+w]
             img_item = "my-image.png"
@@ -108,6 +112,7 @@ if __name__ == "__main__":
             if conf >= 15: # and conf <= 85:
                 print(id_)
                 print(labels[id_])
+        bebopVision.open_video()
 
     else:
         print("Error connecting to bebop.  Retry")
