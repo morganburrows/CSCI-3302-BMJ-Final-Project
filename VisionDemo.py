@@ -1,9 +1,3 @@
-"""
-Demo of the Bebop vision using DroneVisionGUI (relies on libVLC).  It is a different
-multi-threaded approach than DroneVision
-
-Author: Amy McGovern
-"""
 from pyparrot.Bebop import Bebop
 from pyparrot.DroneVisionGUI import DroneVisionGUI
 import threading
@@ -19,11 +13,10 @@ isAlive = False
 
 face_cascade = cv2.CascadeClassifier('src/cascades/data/haarcascade_frontalface_alt2.xml')
 eye_cascade = cv2.CascadeClassifier('src/cascades/data/haarcascade_eye.xml')
-smile_cascade = cv2.CascadeClassifier('src/cascades/data/haarcascade_smile.xml')
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read("trainer.yml")
 
-labels = {"person_name" : 1}
+labels = {"person_name": 1}
 with open("labels.pkl", 'rb') as f: #wb ,writing byte
     og_labels = pickle.load(f)
     labels = {v: k for k, v in og_labels.items()}
@@ -33,17 +26,37 @@ class UserVision:
     def __init__(self, vision):
         self.index = 0
         self.vision = vision
-        self.filename = "test_image_000000.png"
+        self.filename = "test_image.png"
 
     def save_pictures(self, args):
         #print("saving picture")
         img = self.vision.get_latest_valid_picture()
 
-        if (img is not None):
-            self.filename = "test_image_000000.png" #% self.index
+        if (img is not None):   #saving latest img
+            self.filename = "test_image.png" #% self.index
             cv2.imwrite(self.filename, img)
-            self.index +=1
+            self.index += 1
+            self.detect_recognize_face()
 
+    def detect_recognize_face(self):
+        pil_image = Image.open("test_image.png").convert("L") # convert("L") changes img to grayscale
+        #pil_image.show()
+        #final_image = pil_image.resize((550,550), Image.ANTIALIAS)
+        #image_array = np.array(final_image,"uint8")
+        image_array = np.array(pil_image,"uint8")
+        print("detection?")
+        faces = face_cascade.detectMultiScale(image_array, scaleFactor=2.5, minNeighbors=3) # higher scale facter might increase accuracy
+        for (x, y, w, h) in faces:
+            #print(x,y,w,h)
+            print("Detected")
+            roi_color = image_array[y:y+h, x:x+w]
+
+            #recognizer
+            # id_, conf = recognizer.predict(roi_gray)
+            # if conf >= 15: # and conf <= 85:
+            #     print(id_)
+            #     print(labels[id_])
+                #drone movement goes in here
 
 def demo_user_code_after_vision_opened(bebopVision, args):
     bebop = args[0]
@@ -88,30 +101,9 @@ if __name__ == "__main__":
                                      user_args=(bebop, ))
 
         userVision = UserVision(bebopVision)
-        bebopVision.set_user_callback_function(userVision.save_pictures, user_callback_args=None)
-        #bebopVision.open_video()
-        video_capture = bebopVision
+        bebopVision.set_user_callback_function(userVision.save_pictures, user_callback_args=None) #calls save picture continuously
         frame = bebopVision.get_latest_valid_picture()
-        print(frame)
 
-        pil_image = Image.open("/home/tyler/Desktop/CSCI3302/CSCI-3302-BMJ-Final-Project/test_image_000000.png").convert("L")
-        #print(userVision.filename)
-        final_image = pil_image.resize((550,550), Image.ANTIALIAS)
-        image_array = np.array(final_image,"uint8")
-        #gray = cv2.cvtColor(image_array, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=5) # higher scale facter might increase accuracy
-        for (x, y, w, h) in faces:
-            print(x,y,w,h)
-            roi_gray = gray[y:y+h, x:x+w]  # (ycord_start, ycord_end) region of interest
-            roi_color = image_array[y:y+h, x:x+w]
-            img_item = "my-image.png"
-            cv2.imwrite(img_item, roi_gray)
-
-            #recognizer
-            id_, conf = recognizer.predict(roi_gray)
-            if conf >= 15: # and conf <= 85:
-                print(id_)
-                print(labels[id_])
         bebopVision.open_video()
 
     else:
