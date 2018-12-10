@@ -41,21 +41,21 @@ class UserVision:
     def detect_recognize_face(self):
         pil_image = Image.open("test_image.png").convert("L") # convert("L") changes img to grayscale
         #pil_image.show()
-        #final_image = pil_image.resize((550,550), Image.ANTIALIAS)
+        final_image = pil_image.resize((550,550), Image.ANTIALIAS)
         #image_array = np.array(final_image,"uint8")
-        image_array = np.array(pil_image,"uint8")
-        print("detection?")
-        faces = face_cascade.detectMultiScale(image_array, scaleFactor=2.5, minNeighbors=3) # higher scale facter might increase accuracy
+        image_array = np.array(final_image,"uint8")
+        #print("detection?")
+        faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=1) # higher scale facter might increase accuracy
         for (x, y, w, h) in faces:
             #print(x,y,w,h)
             print("Detected")
             roi_color = image_array[y:y+h, x:x+w]
 
             #recognizer
-            # id_, conf = recognizer.predict(roi_gray)
-            # if conf >= 15: # and conf <= 85:
-            #     print(id_)
-            #     print(labels[id_])
+            id_, conf = recognizer.predict(roi_color)
+            if conf >= 30 and conf <= 100: # and conf <= 85:
+                print(id_)
+                print(labels[id_])
                 #drone movement goes in here
 
 def demo_user_code_after_vision_opened(bebopVision, args):
