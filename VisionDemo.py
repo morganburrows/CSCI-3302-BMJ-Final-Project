@@ -78,18 +78,21 @@ class UserVision:
 
         return idmax
 
-    # def perform_action(self,id):
-    #     if id == 1:
-    #         #do something
-    #     elif id == 2:
-    #         print()
-    #     elif id == 3:
-    #         print()
-    #     else:
-    #         #ATTACK
-    #         print()
-    #
-    #     self.safe_land(10)
+    def perform_action(self,id):
+        if id == 1:
+            #bebop.flip(back)
+            print("backflip")
+        elif id == 2:
+            # bebop.flip(front)
+            print("frontflip")
+        elif id == 3:
+            # bebop.turn_degrees(180)
+            print('turn around')
+        else:
+            #ATTACK
+            print("attack")
+    
+        self.safe_land(10)
 
 
 
