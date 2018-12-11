@@ -32,8 +32,8 @@ class UserVision:
         #print("saving picture")
         img = self.vision.get_latest_valid_picture()
 
-        if (img is not None):   #saving latest img
-            self.filename = "test_image.png" #% self.index
+        if img is not None:   # saving latest img
+            self.filename = "test_image.png" # % self.index
             cv2.imwrite(self.filename, img)
             self.index += 1
             self.detect_recognize_face()
@@ -42,9 +42,7 @@ class UserVision:
         pil_image = Image.open("test_image.png").convert("L") # convert("L") changes img to grayscale
         #pil_image.show()
         final_image = pil_image.resize((550,550), Image.ANTIALIAS)
-        #image_array = np.array(final_image,"uint8")
-        image_array = np.array(final_image,"uint8")
-        #print("detection?")
+        image_array = np.array(final_image, "uint8")
         faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=1) # higher scale facter might increase accuracy
         for (x, y, w, h) in faces:
             #print(x,y,w,h)
@@ -53,10 +51,48 @@ class UserVision:
 
             #recognizer
             id_, conf = recognizer.predict(roi_color)
-            if conf >= 30 and conf <= 100: # and conf <= 85:
+            if conf <= 70:  # and conf <= 85:  # 0 is perfect match  200 is max i guess?
                 print(id_)
                 print(labels[id_])
+
+                # if id_ == 1:
+                #     return 1
+                # elif id_ == 2:
+                #     return 2
+                # elif id_ == 3:
+                #     return 3
+                # else:
+                #     return 999
                 #drone movement goes in here
+
+    def check_5sec(self):
+        t_end = time.time() + 5
+        id_arr = []
+        for i in range(0,len(labels)):
+            id_arr.append(0)
+        while time.time() < t_end:
+            id = self.detect_recognize_face()
+            id_arr[id] += 1
+
+        idmax = max(id_arr)
+
+        return idmax
+
+    # def perform_action(self,id):
+    #     if id == 1:
+    #         #do something
+    #     elif id == 2:
+    #         print()
+    #     elif id == 3:
+    #         print()
+    #     else:
+    #         #ATTACK
+    #         print()
+    #
+    #     self.safe_land(10)
+
+
+
 
 def demo_user_code_after_vision_opened(bebopVision, args):
     bebop = args[0]
@@ -88,6 +124,8 @@ def demo_user_code_after_vision_opened(bebopVision, args):
     print("disconnecting")
     bebop.disconnect()
 
+#def something(bebop):
+
 if __name__ == "__main__":
     # make my bebop object
     bebop = Bebop()
@@ -99,9 +137,12 @@ if __name__ == "__main__":
         # start up the video
         bebopVision = DroneVisionGUI(bebop, is_bebop=True, user_code_to_run=demo_user_code_after_vision_opened,
                                      user_args=(bebop, ))
-
         userVision = UserVision(bebopVision)
+        #take off
+        #bebop.safe_takeoff(10)
         bebopVision.set_user_callback_function(userVision.save_pictures, user_callback_args=None) #calls save picture continuously
+        #bebopVision.set_user_callback_function(something(bebop), user_callback_args=None) #calls save picture continuously
+
         frame = bebopVision.get_latest_valid_picture()
 
         bebopVision.open_video()
