@@ -27,6 +27,7 @@ class UserVision:
         self.index = 0
         self.vision = vision
         self.filename = "test_image.png"
+        self.faceid = 999
 
     def save_pictures(self, args):
         #print("saving picture")
@@ -48,50 +49,37 @@ class UserVision:
             #print(x,y,w,h)
             print("Detected")
             roi_color = image_array[y:y+h, x:x+w]
-
+            #recid = self.check_5sec()
             #recognizer
             id_, conf = recognizer.predict(roi_color)
             if conf <= 70:  # and conf <= 85:  # 0 is perfect match  200 is max i guess?
                 print(id_)
                 print(labels[id_])
-
-                # if id_ == 1:
-                #     return 1
-                # elif id_ == 2:
-                #     return 2
-                # elif id_ == 3:
-                #     return 3
-                # else:
-                #     return 999
-                #drone movement goes in here
-
-    def check_5sec(self):
-        t_end = time.time() + 5
-        id_arr = []
-        for i in range(0,len(labels)):
-            id_arr.append(0)
-        while time.time() < t_end:
-            id = self.detect_recognize_face()
-            id_arr[id] += 1
-
-        idmax = max(id_arr)
-
-        return idmax
-
-    # def perform_action(self,id):
-    #     if id == 1:
-    #         #do something
-    #     elif id == 2:
-    #         print()
-    #     elif id == 3:
-    #         print()
-    #     else:
-    #         #ATTACK
-    #         print()
-    #
-    #     self.safe_land(10)
+                perform_action()
+                if id_ == 0:
+                    self.faceid = 0
+                elif id_ == 1:
+                    self.faceid = 1
+                elif id_ == 2:
+                    self.faceid = 2
+                else:
+                    self.faceid = 3
 
 
+
+def perform_action(bebop,id):
+    if id == 0:
+        #do something
+        print()
+    elif id == 1:
+        print()
+    elif id == 2:
+        print()
+    else:
+        #ATTACK
+        print()
+
+    #self.safe_land(10)
 
 
 def demo_user_code_after_vision_opened(bebopVision, args):
@@ -141,6 +129,8 @@ if __name__ == "__main__":
         #take off
         #bebop.safe_takeoff(10)
         bebopVision.set_user_callback_function(userVision.save_pictures, user_callback_args=None) #calls save picture continuously
+        bebopVision.set_user_callback_function(perform_action(bebop,userVision.faceid), user_callback_args=None)
+
         #bebopVision.set_user_callback_function(something(bebop), user_callback_args=None) #calls save picture continuously
 
         frame = bebopVision.get_latest_valid_picture()
