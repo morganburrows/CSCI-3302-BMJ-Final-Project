@@ -45,7 +45,7 @@ class UserVision:
         image_array = np.array(final_image, "uint8")
         faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=1) # higher scale facter might increase accuracy
         for (x, y, w, h) in faces:
-            #print(x,y,w,h)
+            print(x,y,w,h)
             print("Detected")
             roi_color = image_array[y:y+h, x:x+w]
 
@@ -81,12 +81,16 @@ class UserVision:
     def perform_action(self,id):
         if id == 1:
             #bebop.flip(back)
+            bebop.smart_sleep(5)
             print("backflip")
+
         elif id == 2:
             # bebop.flip(front)
+            bebop.smart_sleep(5)
             print("frontflip")
         elif id == 3:
             # bebop.turn_degrees(180)
+            bebop.smart_sleep(5)
             print('turn around')
         else:
             #ATTACK
