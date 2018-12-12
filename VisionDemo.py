@@ -45,7 +45,7 @@ class UserVision:
         image_array = np.array(final_image, "uint8")
         faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=1) # higher scale facter might increase accuracy
         for (x, y, w, h) in faces:
-            print(x,y,w,h)
+            print(x,y,w,h)            
             print("Detected")
             roi_color = image_array[y:y+h, x:x+w]
 
@@ -54,6 +54,7 @@ class UserVision:
             if conf <= 70:  # and conf <= 85:  # 0 is perfect match  200 is max i guess?
                 print(id_)
                 print(labels[id_])
+                self.adjust_drone_pos(x,y,w,h)
 
                 # if id_ == 1:
                 #     return 1
@@ -97,6 +98,33 @@ class UserVision:
             print("attack")
     
         self.safe_land(10)
+
+    def adjust_drone_pos(self, x, y, w, h):
+
+        if x == None:
+            return
+        
+        if x < 100:
+            print("turn CCW")
+            # bebop.turn_degrees(-5)
+            # bebop.smart_sleep(2)
+
+        if x > 350:
+            print("turn CW")
+            # bebop.turn_degrees(5)
+            # bebop.smart_sleep(2)
+
+        if y < 100:
+            print("Ascend")
+
+        if y > 350:
+            print("descend")
+
+        if h < 75:
+            print("Move Forward")
+        
+        if h > 150:
+            print("Move Backward")
 
 
 
