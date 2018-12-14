@@ -37,8 +37,16 @@ class UserVision:
         if img is not None:   # saving latest img
             self.filename = "test_image.png" # % self.index
             cv2.imwrite(self.filename, img)
-            self.index += 1
+            
             self.detect_recognize_face()
+
+    def take_photo(self, id):
+        img = self.vision.get_latest_valid_picture()
+
+        if img is not None:
+            filename = "photo_{}_{}.png".format(id, self.index)
+            self.index += 1
+            cv2.imwrite(filename, img)
 
     def detect_recognize_face(self):
         pil_image = Image.open("test_image.png").convert("L") # convert("L") changes img to grayscale
@@ -70,21 +78,24 @@ class UserVision:
     def perform_action(self, x, y, h):
 
         if self.faceid == 0:
-            self.bebop.flip('back')
-            self.bebop.smart_sleep(5)
-            print("backflip")
+            # self.bebop.flip('back')
+            # self.bebop.smart_sleep(5)
+            # print("backflip")
+            self.take_photo(labels[0])
         elif self.faceid == 1:
             # self.bebop.flip('front')
-            self.bebop.smart_sleep(5)
-            print("frontflip")
+            # self.bebop.smart_sleep(5)
+            # print("frontflip")
+            self.take_photo(labels[1])
         elif self.faceid == 2:
             # self.bebop.flip('left')
-            self.bebop.smart_sleep(5)
-            print('turn around')
+            # self.bebop.smart_sleep(5)
+            # print('turn around')
+            self.take_photo(labels[2])
         else:
             # ATTACK
-            self.adjust_drone_pos(x,y,h)
-            print("attack")
+            self.take_photo('Unknown')
+            print("Unknown")
 
         #self.safe_land(10)
 
@@ -114,6 +125,16 @@ class UserVision:
             self.bebop.fly_direct(0,0,0,-20,1)
             self.bebop.smart_sleep(2)
 
+        if h < 40:
+            print("move forward")
+            self.bebop.fly_direct(0,20,0,0,1)
+            self.bebop.smart_sleep(2)
+
+        elif h > 100:
+            print("move backward")
+            self.bebop.fly_direct(0,-20,0,0,1)
+            self.bebop.smart_sleep(2)
+
 
 def demo_user_code_after_vision_opened(bebopVision, args):
     bebop = args[0]
@@ -128,7 +149,7 @@ def demo_user_code_after_vision_opened(bebopVision, args):
     # skipping actually flying for safety purposes indoors - if you want
     # different pictures, move the bebop around by hand
     # print("Fly me around by hand!")
-    # bebop.smart_sleep(5)
+    bebop.smart_sleep(5)
 
     if (bebopVision.vision_running):
         # print("Moving the camera using velocity")
