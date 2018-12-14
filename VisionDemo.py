@@ -104,20 +104,20 @@ class UserVision:
         if x < 100:
             # Turn CCW
             print("CCW")
-            self.bebop.fly_direct(0,0,-50,0,2)
-            self.bebop.smart_sleep(2)
+            self.bebop.fly_direct(0,0,-80,0,2)
+            # self.bebop.smart_sleep(2)
 
         elif x > 400:
             # Turn CW
             print("CW")
-            self.bebop.fly_direct(0,0,50,0,2)
-            self.bebop.smart_sleep(2)
+            self.bebop.fly_direct(0,0,80,0,2)
+            # self.bebop.smart_sleep(2)
     
         if y < 100: 
             # increase altitude
             print("ascend")
             self.bebop.fly_direct(0,0,0,20,1)
-            self.bebop.smart_sleep(2)
+            # self.bebop.smart_sleep(2)
 
         elif y > 400:
             # reduce altitude
@@ -125,15 +125,15 @@ class UserVision:
             self.bebop.fly_direct(0,0,0,-20,1)
             self.bebop.smart_sleep(2)
 
-        if h < 40:
+        if h < 60:
             print("move forward")
             self.bebop.fly_direct(0,20,0,0,1)
-            self.bebop.smart_sleep(2)
+            # self.bebop.smart_sleep(2)
 
         elif h > 100:
             print("move backward")
-            self.bebop.fly_direct(0,-20,0,0,1)
-            self.bebop.smart_sleep(2)
+            self.bebop.fly_direct(0,-30,0,0,1)
+            # self.bebop.smart_sleep(2)
 
 
 def demo_user_code_after_vision_opened(bebopVision, args):
