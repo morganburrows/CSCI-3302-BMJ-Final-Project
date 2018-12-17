@@ -75,7 +75,7 @@ class UserVision:
 
             #recognizer
             id_, conf = recognizer.predict(roi_color)
-            if conf <= 70:  # and conf <= 85:  # 0 is perfect match  200 is max i guess?
+            if conf <= 80:  # and conf <= 85:  # 0 is perfect match  200 is max i guess?
                 print(id_)
                 print(labels[id_])
                 if id_ == 0:
@@ -113,7 +113,7 @@ class UserVision:
             print("CW")
             self.bebop.fly_direct(0,0,80,0,2)
     
-        if y < 100: 
+        elif y < 100: 
             # increase altitude
             print("ascend")
             self.bebop.fly_direct(0,0,0,20,1)
@@ -123,12 +123,12 @@ class UserVision:
             print("descend")
             self.bebop.fly_direct(0,0,0,-20,1)
 
-        if h < 60:
+        elif h < 60:
             # move closer
             print("move forward")
-            self.bebop.fly_direct(0,20,0,0,1)
+            self.bebop.fly_direct(0,10,0,0,1)
 
-        elif h > 100:
+        elif h > 150:
             # move away
             print("move backward")
             self.bebop.fly_direct(0,-30,0,0,1)
